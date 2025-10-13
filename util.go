@@ -13,7 +13,7 @@ func validateTextLength(value, text string) error {
 }
 
 // Validate length of key (must either 16 or 24 or 32 byte)
-func validateKeyLength(key string) error {
+func validateKey(key string) error {
 
 	if len(key) != 16 && len(key) != 24 && len(key) != 32 {
 		return errors.New("key length must be 16, 24, atau 32 bytes")
@@ -22,7 +22,7 @@ func validateKeyLength(key string) error {
 }
 
 // Validate length of iv (must fixed 16 byte)
-func validateIvLength(iv string) error {
+func validateIv(iv string) error {
 
 	if len(iv) != 16 {
 		return errors.New("iv length must fixed 16 bytes")
