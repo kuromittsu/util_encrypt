@@ -7,7 +7,7 @@ import (
 )
 
 // AES encrypt
-// using key and iv (initialization vector)
+// encrypt raw text to encrypted version using key and iv (initialization vector)
 func aesEncrypt(text, key, iv string) (string, error) {
 
 	// Validate text
@@ -16,12 +16,12 @@ func aesEncrypt(text, key, iv string) (string, error) {
 	}
 
 	// Validate key
-	if err := validateKeyLength(key); err != nil {
+	if err := validateKey(key); err != nil {
 		return "", err
 	}
 
 	// Validate iv
-	if err := validateIvLength(iv); err != nil {
+	if err := validateIv(iv); err != nil {
 		return "", err
 	}
 
@@ -45,7 +45,7 @@ func aesEncrypt(text, key, iv string) (string, error) {
 }
 
 // AES decrypt
-// will decrypt encrypted text using key and iv (initialization vector)
+// decrypt encrypted text to raw text using key and iv (initialization vector)
 func aesDecrypt(encryptedText, key, iv string) (string, error) {
 
 	// Validate text
@@ -54,12 +54,12 @@ func aesDecrypt(encryptedText, key, iv string) (string, error) {
 	}
 
 	// Validate key
-	if err := validateKeyLength(key); err != nil {
+	if err := validateKey(key); err != nil {
 		return "", err
 	}
 
 	// Validate iv
-	if err := validateIvLength(iv); err != nil {
+	if err := validateIv(iv); err != nil {
 		return "", err
 	}
 
