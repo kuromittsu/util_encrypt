@@ -9,3 +9,8 @@ func AesDecrypt(encryptedText, key, iv string) (string, error) {
 
 	return aesDecrypt(encryptedText, key, iv)
 }
+
+func NewFile(inputPath, extensionFile, outputFilename, outputPath string) *file {
+
+	return newFile(inputPath, extensionFile, outputFilename, outputPath)
+}
