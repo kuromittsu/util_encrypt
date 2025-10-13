@@ -1,7 +1,11 @@
 package main
 
+var key string = "BOAlNWXHfwKdiQsZIVmEBqGTNrfmNMpe"
+var iv string = "EhJkLKhozRriKdso"
+
 func main() {
 
-	encrypt()
+	// text_encrypt()
+	file_encrypt()
 
 }

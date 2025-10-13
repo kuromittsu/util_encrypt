@@ -7,10 +7,7 @@ import (
 	"github.com/kuromittsu/util_encrypt"
 )
 
-var key string = "BOAlNWXHfwKdiQsZIVmEBqGTNrfmNMpe"
-var iv string = "EhJkLKhozRriKdso"
-
-func encrypt() {
+func text_encrypt() {
 
 	text := "Alfiras"
 
