@@ -17,9 +17,10 @@ func file_encrypt() {
 		"",                     // output folder
 	)
 
-	if err := fe.Encrypt(
+	if _, err := fe.Encrypt(
 		[]byte(key), // encrypt key
 		false,       // delete input file after success encrypt
+		true,        // auto save / write to file
 	); err != nil {
 		fmt.Printf("error while encrypt file | %v \n", err)
 		os.Exit(0)
@@ -34,9 +35,10 @@ func file_encrypt() {
 		"",                      //output folder
 	)
 
-	if err := fd.Decrypt(
+	if _, err := fd.Decrypt(
 		[]byte(key), // decrypt key
 		false,       // delete input file after success decrypt
+		true,        // auto save / write to file
 	); err != nil {
 		fmt.Printf("error while decrypt file | %v \n", err)
 		os.Exit(0)
