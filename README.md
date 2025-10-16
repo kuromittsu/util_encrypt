@@ -82,8 +82,8 @@ decryptedText: Alfiras
 ```go
 // *file
 
-func(f *file) Encrypt(key []byte, deleteOld bool) error
-func(f *file) Decrypt(key []byte, deleteOld bool) error
+func(f *file) Encrypt(key []byte, deleteOld, autoSave bool) ([]byte, error)
+func(f *file) Decrypt(key []byte, deleteOld, autoSave bool) ([]byte, error)
 ```
 
 #### Encrypt File
@@ -95,13 +95,17 @@ fe := util_encrypt.NewFile(
   "encrypted",                 // output file name
   "",                          // output folder
 )
-if err := fe.Encrypt(
+result, err := fe.Encrypt(
   []byte(key), // encrypt key
   false,       // delete input file after success encrypt
-); err != nil {
+  true,        // auto save / write to file
+)
+if err != nil {
   fmt.Printf("error while encrypt file | %v \n", err)
   os.Exit(0)
 }
+
+fmt.Printf("encrypted result: %v\n", result)
 ```
 
 #### Decrypt File
@@ -114,11 +118,15 @@ fd := util_encrypt.NewFile(
   "",                           // output folder
 )
 
-if err := fd.Decrypt(
+result, err := fd.Decrypt(
   []byte(key), // decrypt key
   false,       // delete input file after success decrypt
-); err != nil {
+  true,        // auto save / write to file
+)
+if err != nil {
   fmt.Printf("error while decrypt file | %v \n", err)
   os.Exit(0)
 }
+
+fmt.Printf("decrypted result: %v\n", result)
 ```
