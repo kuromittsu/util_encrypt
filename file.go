@@ -107,7 +107,10 @@ func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult
 	}
 
 	if deleteOld {
-		return nil, os.Remove(f.inputPath)
+		if err := os.Remove(f.inputPath); err != nil {
+			os.Remove(f.getOutput())
+			return nil, err
+		}
 	}
 
 	return &fileEncryptResult{
@@ -170,7 +173,10 @@ func (f *file) Decrypt(key []byte, deleteOld, autoSave bool) (*fileDecryptResult
 	}
 
 	if deleteOld {
-		return nil, os.Remove(f.inputPath)
+		if err := os.Remove(f.inputPath); err != nil {
+			os.Remove(f.getOutput())
+			return nil, err
+		}
 	}
 
 	return &fileDecryptResult{
