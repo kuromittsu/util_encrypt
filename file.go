@@ -58,7 +58,7 @@ func (f *file) getOutput() string {
 	return f.outputPath + f.filename + f.extension
 }
 
-func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) ([]byte, error) {
+func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult, error) {
 
 	if err := validateKey(string(key)); err != nil {
 		return nil, err
@@ -110,10 +110,15 @@ func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) ([]byte, error) {
 		return nil, os.Remove(f.inputPath)
 	}
 
-	return ciphertext, nil
+	return &fileEncryptResult{
+		path: f.getOutput(),
+		ext:  f.extension,
+
+		chipherText: ciphertext,
+	}, nil
 }
 
-func (f *file) Decrypt(key []byte, deleteOld, autoSave bool) ([]byte, error) {
+func (f *file) Decrypt(key []byte, deleteOld, autoSave bool) (*fileDecryptResult, error) {
 
 	if len(f.inputPath) == 0 {
 		return nil, errors.New("input path is required")
@@ -168,5 +173,9 @@ func (f *file) Decrypt(key []byte, deleteOld, autoSave bool) ([]byte, error) {
 		return nil, os.Remove(f.inputPath)
 	}
 
-	return plaintext, nil
+	return &fileDecryptResult{
+		path: f.getOutput(),
+
+		plainText: plaintext,
+	}, nil
 }
