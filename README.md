@@ -80,10 +80,25 @@ decryptedText: Alfiras
 #### Struct
 
 ```go
-// *file
+// file
 
-func(f *file) Encrypt(key []byte, deleteOld, autoSave bool) ([]byte, error)
-func(f *file) Decrypt(key []byte, deleteOld, autoSave bool) ([]byte, error)
+func(f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult, error)
+func(f *file) Decrypt(key []byte, deleteOld, autoSave bool) (*fileDecryptResult, error)
+```
+
+```go
+// fileEncryptResult
+
+func(f *fileEncryptResult) GetByte() []byte
+func(f *fileEncryptResult) GetPath() string
+func(f *fileEncryptResult) GetExt() string
+```
+
+```go
+// fileDecryptResult
+
+func(f *fileDecryptResult) GetByte() []byte
+func(f *fileDecryptResult) GetPath() string
 ```
 
 #### Encrypt File
@@ -105,7 +120,9 @@ if err != nil {
   os.Exit(0)
 }
 
-fmt.Printf("encrypted result: %v\n", result)
+fmt.Printf("encrypted result (byte): %v\n", result.GetByte())
+fmt.Printf("encrypted result (path): %v\n", result.GetPath())
+fmt.Printf("encrypted result (ext): %v\n", result.GetExt())
 ```
 
 #### Decrypt File
@@ -128,5 +145,6 @@ if err != nil {
   os.Exit(0)
 }
 
-fmt.Printf("decrypted result: %v\n", result)
+fmt.Printf("decrypted result (byte): %v\n", result.GetByte())
+fmt.Printf("decrypted result (path): %v\n", result.GetPath())
 ```
