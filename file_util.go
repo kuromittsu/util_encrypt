@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-func getNormalizeDir(inputPath, dir string) string {
+func getNormalizeOutputDir(inputPath, outputDir string) string {
 
-	normalizedDir := filepath.ToSlash(dir)
+	normalizedDir := filepath.ToSlash(outputDir)
 	if strings.HasPrefix(inputPath, "./") && !strings.HasPrefix(normalizedDir, "./") {
 		normalizedDir = "./" + normalizedDir
 	}
