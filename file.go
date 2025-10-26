@@ -12,50 +12,50 @@ import (
 )
 
 type file struct {
-	inputPath  string
-	outputPath string
-	filename   string
-	extension  string
+	inputPath string
+	outputDir string
+	filename  string
+	extension string
 }
 
-func newFile(inputPath, extensionFile, outputFilename, outputPath string) *file {
+func newFile(inputPath, extensionFile, outputFilename, customOutputDir string) *file {
 
 	// base name
 	basename := filepath.Base(inputPath)
 
-	// dir
-	dir := filepath.Dir(inputPath)
-	if len(outputPath) != 0 {
-		dir = outputPath
+	// output dir
+	outputDir := filepath.Dir(inputPath)
+	if customOutputDir != "" {
+		outputDir = customOutputDir
+	}
+
+	// filename
+	filename := basename[:len(basename)-len(filepath.Ext(basename))]
+	if outputFilename != "" {
+		filename = outputFilename
 	}
 
 	// extension
 	ext := filepath.Ext(basename)
-	if len(extensionFile) != 0 {
+	if extensionFile != "" {
 		ext = filterExt(extensionFile)
 	}
 
-	// filename
-	filename := basename[:len(basename)-len(ext)]
-	if len(outputFilename) != 0 {
-		filename = outputFilename
-	}
-
-	normalizedDir := getNormalizeDir(inputPath, dir)
+	outputDir = getNormalizeOutputDir(inputPath, outputDir)
 
 	return &file{
-		inputPath:  inputPath,
-		outputPath: normalizedDir,
-		extension:  ext,
-		filename:   filename,
+		inputPath: inputPath,
+		outputDir: outputDir,
+		extension: ext,
+		filename:  filename,
 	}
 }
 
 // functions
 
-func (f *file) getOutput() string {
+func (f *file) getOutputDir() string {
 
-	return f.outputPath + f.filename + f.extension
+	return f.outputDir + f.filename + f.extension
 }
 
 func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult, error) {
@@ -100,7 +100,7 @@ func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult
 
 	if autoSave {
 		// write encrypted data to output file
-		err = os.WriteFile(f.getOutput(), ciphertext, 0644)
+		err = os.WriteFile(f.getOutputDir(), ciphertext, 0644)
 		if err != nil {
 			return nil, fmt.Errorf("failed write encrypted file: %w", err)
 		}
@@ -108,13 +108,13 @@ func (f *file) Encrypt(key []byte, deleteOld, autoSave bool) (*fileEncryptResult
 
 	if deleteOld {
 		if err := os.Remove(f.inputPath); err != nil {
-			os.Remove(f.getOutput())
+			os.Remove(f.getOutputDir())
 			return nil, err
 		}
 	}
 
 	return &fileEncryptResult{
-		path: f.getOutput(),
+		path: f.getOutputDir(),
 		ext:  f.extension,
 
 		chipherText: ciphertext,
@@ -167,20 +167,20 @@ func (f *file) Decrypt(key []byte, deleteOld, autoSave bool) (*fileDecryptResult
 
 	if autoSave {
 		// write decrypted data to output file
-		if err := os.WriteFile(f.getOutput(), plaintext, 0644); err != nil {
+		if err := os.WriteFile(f.getOutputDir(), plaintext, 0644); err != nil {
 			return nil, fmt.Errorf("failed write decrypted file: %w", err)
 		}
 	}
 
 	if deleteOld {
 		if err := os.Remove(f.inputPath); err != nil {
-			os.Remove(f.getOutput())
+			os.Remove(f.getOutputDir())
 			return nil, err
 		}
 	}
 
 	return &fileDecryptResult{
-		path: f.getOutput(),
+		path: f.getOutputDir(),
 
 		plainText: plaintext,
 	}, nil
