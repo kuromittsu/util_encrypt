@@ -1,20 +1,17 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   EXAMPLE_DIR: ./example/
   TESTING_DIR: ./testing/
-  GREETING: Hello, World!
 
 tasks:
   testing:
     aliases: [t]
     cmds:
       - go run "{{.TESTING_DIR}}"
-    silent: true
   example:
     aliases: [x]
     cmds:
       - go run "{{.EXAMPLE_DIR}}"
-    silent: true
